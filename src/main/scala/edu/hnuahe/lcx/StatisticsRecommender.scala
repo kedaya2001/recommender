@@ -6,9 +6,9 @@ import java.util.Date
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
-case class Rating(userId: Int, productId: Int, score: Double, timestamp: Int)
+//case class Rating(userId: Int, productId: Int, score: Double, timestamp: Int)
 
-case class MongoConfig(uri: String, db: String)
+//case class MongoConfig(uri: String, db: String)
 
 object StatisticsRecommender {
   // 定义mongodb中存储的表名
@@ -25,7 +25,7 @@ object StatisticsRecommender {
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("StatisticsRecommender")
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("StatisticsRecommender")
     // 创建spark session
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 
@@ -38,7 +38,7 @@ object StatisticsRecommender {
       .option("collection", MONGODB_RATING_COLLECTION)
       .format("com.mongodb.spark.sql")
       .load()
-      .as[Rating]
+      .as[Rating_timestamp]
       .toDF()
 
     // 创建一张叫ratings的临时表

@@ -15,7 +15,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
  * 外设产品|鼠标|电脑/办公           商品分类
  * 富勒|鼠标|电子产品|好用|外观漂亮   商品UGC标签
  */
-case class Product(productId: Int, name: String, imageUrl: String, categories: String, tags: String)
+//case class Product(productId: Int, name: String, imageUrl: String, categories: String, tags: String)
 
 /**
  * Rating数据集
@@ -24,7 +24,7 @@ case class Product(productId: Int, name: String, imageUrl: String, categories: S
  * 5.0         评分
  * 1395676800  时间戳
  */
-case class Rating(userId: Int, productId: Int, score: Double, timestamp: Int)
+case class Rating_timestamp(userId: Int, productId: Int, score: Double, timestamp: Int)
 
 /**
  * MongoDB连接配置
@@ -32,7 +32,7 @@ case class Rating(userId: Int, productId: Int, score: Double, timestamp: Int)
  * @param uri MongoDB的连接uri
  * @param db  要操作的db
  */
-case class MongoConfig(uri: String, db: String)
+//case class MongoConfig(uri: String, db: String)
 
 object DataLoader {
   // 定义数据文件路径
@@ -51,7 +51,7 @@ object DataLoader {
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("DataLoader")
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("DataLoader")
     // 创建spark session
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 
@@ -69,7 +69,7 @@ object DataLoader {
     val ratingRDD = spark.sparkContext.textFile(RATING_DATA_PATH)
     val ratingDF = ratingRDD.map(item => {
       val attr = item.split(",")
-      Rating(attr(0).toInt, attr(1).toInt, attr(2).toDouble, attr(3).toInt)
+      Rating_timestamp(attr(0).toInt, attr(1).toInt, attr(2).toDouble, attr(3).toInt)
     }).toDF()
 
     implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))

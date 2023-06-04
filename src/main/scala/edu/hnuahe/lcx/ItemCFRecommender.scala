@@ -5,13 +5,13 @@ import org.apache.spark.sql.SparkSession
 
 case class ProductRating(userId: Int, productId: Int, score: Double, timestamp: Int)
 
-case class MongoConfig(uri: String, db: String)
+//case class MongoConfig(uri: String, db: String)
 
 // 定义标准推荐对象
-case class Recommendation(productId: Int, score: Double)
+//case class Recommendation(productId: Int, score: Double)
 
 // 定义商品相似度列表
-case class ProductRecs(productId: Int, recs: Seq[Recommendation])
+//case class ProductRecs(productId: Int, recs: Seq[Recommendation])
 
 object ItemCFRecommender {
   // 定义常量和表名
@@ -26,7 +26,7 @@ object ItemCFRecommender {
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("ItemCFRecommender")
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("ItemCFRecommender")
     // 创建spark session
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 

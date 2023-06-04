@@ -15,7 +15,7 @@ object ALSTrainer {
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("OfflineRecommender")
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("OfflineRecommender")
     // 创建spark session
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 

@@ -16,16 +16,16 @@ object ConnHelper extends Serializable {
   lazy val mongoClient = MongoClient(MongoClientURI("mongodb://127.0.0.1:27017/recommender"))
 }
 
-case class MongoConfig(uri: String, db: String)
+//case class MongoConfig(uri: String, db: String)
 
 // 定义标准推荐对象
-case class Recommendation(productId: Int, score: Double)
+//case class Recommendation(productId: Int, score: Double)
 
 // 定义用户的推荐列表
 case class UserRecs(userId: Int, recs: Seq[Recommendation])
 
 // 定义商品相似度列表
-case class ProductRecs(productId: Int, recs: Seq[Recommendation])
+//case class ProductRecs(productId: Int, recs: Seq[Recommendation])
 
 object OnlineRecommender {
   // 定义常量和表名
@@ -45,7 +45,7 @@ object OnlineRecommender {
     )
 
     // 创建spark conf
-    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("OnlineRecommender")
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("OnlineRecommender")
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     val sc = spark.sparkContext
     // Duration 应该足够长，能够支撑实时计算结束
