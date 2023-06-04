@@ -37,19 +37,6 @@
             <version>3.0.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.4.2</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-core -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-core</artifactId>
-            <version>4.2.2</version>
-        </dependency>
-
         <!-- 加入MongoDB的驱动 -->
         <!-- 用于代码方式连接MongoDB -->
         <!-- https://mvnrepository.com/artifact/com.mongodb.casbah/casbah-commons -->
