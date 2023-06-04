@@ -36,10 +36,10 @@ case class Rating_timestamp(userId: Int, productId: Int, score: Double, timestam
 
 object DataLoader {
   // 定义数据文件路径
-  val PRODUCT_DATA_PATH = "spark/myapp/products.csv"
-  //  val PRODUCT_DATA_PATH = "src/main/resources/products.csv"
-  val RATING_DATA_PATH = "spark/myapp/ratings.csv"
-  //  val RATING_DATA_PATH = "src/main/resources/ratings.csv"
+//  val PRODUCT_DATA_PATH = "spark/myapp/products.csv"
+    val PRODUCT_DATA_PATH = "src/main/resources/products.csv"
+//  val RATING_DATA_PATH = "spark/myapp/ratings.csv"
+    val RATING_DATA_PATH = "src/main/resources/ratings.csv"
   // 定义mongodb中存储的表名
   val MONGODB_PRODUCT_COLLECTION = "Product"
   val MONGODB_RATING_COLLECTION = "Rating"
@@ -51,7 +51,7 @@ object DataLoader {
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
-    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("DataLoader")
+    val sparkConf = new SparkConf().setMaster(config("spark.cores")).setAppName("DataLoader")
     // 创建spark session
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 
