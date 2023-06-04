@@ -46,7 +46,7 @@ object DataLoader {
 
   def main(args: Array[String]): Unit = {
     val config = Map(
-      "mongo.uri" -> "mongodb://127.0.0.1:27017/recommender",
+      "mongo.uri" -> "mongodb://lichenxuan:27017/recommender",
       "mongo.db" -> "recommender"
     )
     // 创建一个spark config
