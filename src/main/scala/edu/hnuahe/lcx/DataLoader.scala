@@ -1,7 +1,8 @@
 package edu.hnuahe.lcx
 
-import com.mongodb.casbah.commons.MongoDBObject
-import com.mongodb.casbah.{MongoClient, MongoClientURI}
+import com.mongodb.casbah.Imports._
+//import com.mongodb.casbah.commons.MongoDBObject
+//import com.mongodb.casbah.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
