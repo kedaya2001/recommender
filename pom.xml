@@ -15,9 +15,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.scalanlp</groupId>
+            <groupId>org.jblas</groupId>
             <artifactId>jblas</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.3</version>
         </dependency>
 
         <!-- Spark的依赖引入 -->
