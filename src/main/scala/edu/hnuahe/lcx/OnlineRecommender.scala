@@ -13,7 +13,7 @@ import redis.clients.jedis.Jedis
 object ConnHelper extends Serializable {
   // 懒变量定义，使用的时候才初始化
   lazy val jedis = new Jedis("127.0.0.1")
-  lazy val mongoClient = MongoClient(MongoClientURI("mongodb://127.0.0.1:27017/recommender"))
+  lazy val mongoClient: MongoClient = MongoClient(MongoClientURI("mongodb://127.0.0.1:27017/recommender"))
 }
 
 //case class MongoConfig(uri: String, db: String)

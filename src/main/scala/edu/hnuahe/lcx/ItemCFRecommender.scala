@@ -31,7 +31,7 @@ object ItemCFRecommender {
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 
     import spark.implicits._
-    implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
+    implicit val mongoConfig: MongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
 
     // 加载数据，转换成 DF 进行处理
     val ratingDF = spark.read

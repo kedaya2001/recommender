@@ -38,7 +38,7 @@ object OfflineRecommender {
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
 
     import spark.implicits._
-    implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
+    implicit val mongoConfig: MongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
 
     // 加载数据
     val ratingRDD = spark.read

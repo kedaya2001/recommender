@@ -36,10 +36,10 @@ case class Rating_timestamp(userId: Int, productId: Int, score: Double, timestam
 
 object DataLoader {
   // 定义数据文件路径
-  val PRODUCT_DATA_PATH = "/usr/local/spark-2.1.1-bin-without-hadoop/myapp/products.csv"
-  //  val PRODUCT_DATA_PATH = "D:\\VS Code Project\\recommendsystem\\backend\\recommender\\DataLoader\\src\\main\\resources\\products.csv"
-  val RATING_DATA_PATH = "/usr/local/spark-2.1.1-bin-without-hadoop/myapp/ratings.csv"
-  //  val RATING_DATA_PATH = "D:\\VS Code Project\\recommendsystem\\backend\\recommender\\DataLoader\\src\\main\\resources\\ratings.csv"
+  val PRODUCT_DATA_PATH = "spark/myapp/products.csv"
+  //  val PRODUCT_DATA_PATH = "src/main/resources/products.csv"
+  val RATING_DATA_PATH = "spark/myapp/ratings.csv"
+  //  val RATING_DATA_PATH = "src/main/resources/ratings.csv"
   // 定义mongodb中存储的表名
   val MONGODB_PRODUCT_COLLECTION = "Product"
   val MONGODB_RATING_COLLECTION = "Rating"
@@ -72,7 +72,7 @@ object DataLoader {
       Rating_timestamp(attr(0).toInt, attr(1).toInt, attr(2).toDouble, attr(3).toInt)
     }).toDF()
 
-    implicit val mongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
+    implicit val mongoConfig: MongoConfig = MongoConfig(config("mongo.uri"), config("mongo.db"))
     storeDataInMongoDB(productDF, ratingDF)
 
     spark.stop()
