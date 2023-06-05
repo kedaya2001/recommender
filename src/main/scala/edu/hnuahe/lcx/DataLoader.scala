@@ -2,7 +2,8 @@ package edu.hnuahe.lcx
 
 //import com.mongodb.casbah.commons.MongoDBObject
 //import com.mongodb.casbah.{MongoClient, MongoClientURI}
-//import com.mongodb.client.model.Collation
+import com.mongodb.client.model.Collation
+//import com.mongodb.client.result.InsertManyResult
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
