@@ -1,11 +1,7 @@
 package edu.hnuahe.lcx
 
-//import com.mongodb.casbah.commons.MongoDBObject
-//import com.mongodb.casbah.{MongoClient, MongoClientURI}
-import com.mongodb.client.model.Collation
-//import com.mongodb.client.result.InsertManyResult
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.{MongoClient, MongoClientURI}
+import com.mongodb.casbah.commons.MongoDBObject
+import com.mongodb.casbah.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.bson.Document
@@ -84,20 +80,15 @@ object DataLoader {
 
   def storeDataInMongoDB(productDF: DataFrame, ratingDF: DataFrame)(implicit mongoConfig: MongoConfig): Unit = {
     // 新建一个mongodb的连接，客户端
-    val mongoClient = new MongoClient(new MongoClientURI(mongoConfig.uri))
+    val mongoClient = MongoClient(MongoClientURI(mongoConfig.uri))
 
     // 定义要操作的mongodb表，可以理解为 db.Product
-    val productCollection = mongoClient.getDatabase(mongoConfig.db).getCollection(MONGODB_PRODUCT_COLLECTION)
-    val ratingCollection = mongoClient.getDatabase(mongoConfig.db).getCollection(MONGODB_RATING_COLLECTION)
-
-//    val productCollection = mongoClient(mongoConfig.db)(MONGODB_PRODUCT_COLLECTION)
-//    val ratingCollection = mongoClient(mongoConfig.db)(MONGODB_RATING_COLLECTION)
+    val productCollection = mongoClient(mongoConfig.db)(MONGODB_PRODUCT_COLLECTION)
+    val ratingCollection = mongoClient(mongoConfig.db)(MONGODB_RATING_COLLECTION)
 
     // 如果表已经存在，则删掉
-    productCollection.drop()
-    ratingCollection.drop()
-//    productCollection.dropCollection()
-//    ratingCollection.dropCollection()
+    productCollection.dropCollection()
+    ratingCollection.dropCollection()
 
     // 将当前数据存入对应的表中
     productDF.write
@@ -136,9 +127,9 @@ object DataLoader {
       new IndexOptions().unique(true)
         .background(false).name("userId"));
 
-//    productCollection.createIndex(MongoDBObject("productId" -> 1))
-//    ratingCollection.createIndex(MongoDBObject("productId" -> 1))
-//    ratingCollection.createIndex(MongoDBObject("userId" -> 1))
+    productCollection.createIndex(MongoDBObject("productId" -> 1))
+    ratingCollection.createIndex(MongoDBObject("productId" -> 1))
+    ratingCollection.createIndex(MongoDBObject("userId" -> 1))
 
     mongoClient.close()
   }
