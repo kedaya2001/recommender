@@ -106,27 +106,6 @@ object DataLoader {
       .save()
 
     // 对表创建索引
-    val indexOptions = new IndexOptions().unique(true)
-      .background(false).name("productId");
-    val keys = new Document("productId", Integer.valueOf(1));
-
-    productCollection.createIndex(
-      new Document("productId", Integer.valueOf(1)),
-      new IndexOptions().unique(true)
-      .background(false).name("productId"));
-
-    ratingCollection.createIndex(
-      new Document("productId", Integer.valueOf(1)),
-      new IndexOptions().unique(true)
-        .background(false).name("productId"));
-
-    new Document("userId", Integer.valueOf(1))
-
-    ratingCollection.createIndex(
-      new Document("userId", Integer.valueOf(1)),
-      new IndexOptions().unique(true)
-        .background(false).name("userId"));
-
     productCollection.createIndex(MongoDBObject("productId" -> 1))
     ratingCollection.createIndex(MongoDBObject("productId" -> 1))
     ratingCollection.createIndex(MongoDBObject("userId" -> 1))

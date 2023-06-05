@@ -1,26 +1,19 @@
 package edu.hnuahe.lcx
 
-//import com.mongodb.casbah.commons.MongoDBObject
-//import com.mongodb.casbah.{MongoClient, MongoClientURI}
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.{MongoClient, MongoClientURI}
+import com.mongodb.casbah.commons.MongoDBObject
+import com.mongodb.casbah.{MongoClient, MongoClientURI}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.bson.Document
 import redis.clients.jedis.Jedis
-import spire.math.Polynomial.x
-
-import java.util
-import scala.collection.mutable
 
 // 定义一个连接助手对象，建立到redis和mongodb的连接
 object ConnHelper extends Serializable {
   // 懒变量定义，使用的时候才初始化
   lazy val jedis = new Jedis("lichenxuan")
-  lazy val mongoClient: MongoClient = new MongoClient(new MongoClientURI("mongodb://lichenxuan:27017/recommender"))
+  lazy val mongoClient: MongoClient = MongoClient(MongoClientURI("mongodb://lichenxuan:27017/recommender"))
 }
 
 //case class MongoConfig(uri: String, db: String)
@@ -170,10 +163,9 @@ object OnlineRecommender {
     val allSimProducts = simProducts(productId).toArray // 取出对应 productId 的评分列表
 
     // 从 Rating 中获得用户已经评分过的商品，过滤掉，排序输出
-    val ratingCollection = ConnHelper.mongoClient.getDatabase(mongoConfig.db).getCollection(MONGODB_RATING_COLLECTION)
+    val ratingCollection = ConnHelper.mongoClient(mongoConfig.db)(MONGODB_RATING_COLLECTION)
 
-    val ratingExist = ratingCollection.find(new Document("userId", Integer.valueOf(1))) // 从已获取的 Rating 中过滤出只含 userId 的数据
-//    val ratingExist = ratingCollection.find(MongoDBObject("userId" -> userId)) // 从已获取的 Rating 中过滤出只含 userId 的数据
+    val ratingExist = ratingCollection.find(MongoDBObject("userId" -> userId)) // 从已获取的 Rating 中过滤出只含 userId 的数据
       .toArray
       .map { item => // 在（userId,productId,score,timestamp）中只需要 productId
         item.get("productId").toString.toInt
@@ -267,26 +259,12 @@ object OnlineRecommender {
 
   // 写入mongodb
   def saveDataToMongoDB(userId: Int, streamRecs: Array[(Int, Double)])(implicit mongoConfig: MongoConfig): Unit = {
-    val streamRecsCollection = ConnHelper.mongoClient.getDatabase(mongoConfig.db).getCollection(STREAM_RECS)
+    val streamRecsCollection = ConnHelper.mongoClient(mongoConfig.db)(STREAM_RECS)
     // 按照userId查询并更新
+    streamRecsCollection.findAndRemove(MongoDBObject("userId" -> userId))
 
-    streamRecsCollection.findOneAndDelete(new Document("userId", Integer.valueOf(1)))
-//    streamRecsCollection.findAndRemove(MongoDBObject("userId" -> userId))
-
-    new Document().append("productId", 1).append("productId", 1)
-
-    val arrays = new util.ArrayList[Document]()
-
-    streamRecs.map(x => {
-      arrays.add(new Document("userId",userId))
-                    arrays.add(new Document()
-                          .append("productId", x._1)
-                          .append("productId", x._2))
-                  })
-    streamRecsCollection.insertMany(arrays)
-
-//    streamRecsCollection.insert(MongoDBObject("userId" -> userId,
-//      "recs" -> streamRecs.map(x => MongoDBObject("productId" -> x._1, "score" -> x._2))))
+    streamRecsCollection.insert(MongoDBObject("userId" -> userId,
+      "recs" -> streamRecs.map(x => MongoDBObject("productId" -> x._1, "score" -> x._2))))
   }
 
 }
