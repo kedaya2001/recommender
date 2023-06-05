@@ -40,16 +40,22 @@
         <!-- 加入MongoDB的驱动 -->
         <!-- 用于代码方式连接MongoDB -->
         <!-- https://mvnrepository.com/artifact/com.mongodb.casbah/casbah-commons -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>casbah-core_2.12</artifactId>
-            <version>3.1.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.mongodb</groupId>-->
+<!--            <artifactId>casbah-core_2.12</artifactId>-->
+<!--            <version>3.1.1</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver -->
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>3.1.1</version>
+            <artifactId>mongodb-driver-core</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.8.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mongodb/casbah-commons -->
 <!--        <dependency>-->

@@ -2,6 +2,7 @@ package edu.hnuahe.lcx
 
 //import com.mongodb.casbah.commons.MongoDBObject
 //import com.mongodb.casbah.{MongoClient, MongoClientURI}
+//import com.mongodb.client.model.Collation
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
@@ -126,6 +127,8 @@ object DataLoader {
       new Document("productId", Integer.valueOf(1)),
       new IndexOptions().unique(true)
         .background(false).name("productId"));
+
+    new Document("userId", Integer.valueOf(1))
 
     ratingCollection.createIndex(
       new Document("userId", Integer.valueOf(1)),
