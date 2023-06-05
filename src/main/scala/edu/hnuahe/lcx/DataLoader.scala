@@ -1,10 +1,12 @@
 package edu.hnuahe.lcx
 
-//import com.mongodb.casbah.Imports._
-import com.mongodb.casbah.commons.MongoDBObject
-import com.mongodb.casbah.{MongoClient, MongoClientURI}
+//import com.mongodb.casbah.commons.MongoDBObject
+//import com.mongodb.casbah.{MongoClient, MongoClientURI}
+import com.mongodb.client.model.IndexOptions
+import com.mongodb.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.bson.Document
 
 /**
  * Product数据集
@@ -80,14 +82,20 @@ object DataLoader {
 
   def storeDataInMongoDB(productDF: DataFrame, ratingDF: DataFrame)(implicit mongoConfig: MongoConfig): Unit = {
     // 新建一个mongodb的连接，客户端
-    val mongoClient = MongoClient(MongoClientURI(mongoConfig.uri))
+    val mongoClient = new MongoClient(new MongoClientURI(mongoConfig.uri))
+
     // 定义要操作的mongodb表，可以理解为 db.Product
-    val productCollection = mongoClient(mongoConfig.db)(MONGODB_PRODUCT_COLLECTION)
-    val ratingCollection = mongoClient(mongoConfig.db)(MONGODB_RATING_COLLECTION)
+    val productCollection = mongoClient.getDatabase(mongoConfig.db).getCollection(MONGODB_PRODUCT_COLLECTION)
+    val ratingCollection = mongoClient.getDatabase(mongoConfig.db).getCollection(MONGODB_RATING_COLLECTION)
+
+//    val productCollection = mongoClient(mongoConfig.db)(MONGODB_PRODUCT_COLLECTION)
+//    val ratingCollection = mongoClient(mongoConfig.db)(MONGODB_RATING_COLLECTION)
 
     // 如果表已经存在，则删掉
-    productCollection.dropCollection()
-    ratingCollection.dropCollection()
+    productCollection.drop()
+    ratingCollection.drop()
+//    productCollection.dropCollection()
+//    ratingCollection.dropCollection()
 
     // 将当前数据存入对应的表中
     productDF.write
@@ -105,9 +113,28 @@ object DataLoader {
       .save()
 
     // 对表创建索引
-    productCollection.createIndex(MongoDBObject("productId" -> 1))
-    ratingCollection.createIndex(MongoDBObject("productId" -> 1))
-    ratingCollection.createIndex(MongoDBObject("userId" -> 1))
+    val indexOptions = new IndexOptions().unique(true)
+      .background(false).name("productId");
+    val keys = new Document("productId", Integer.valueOf(1));
+
+    productCollection.createIndex(
+      new Document("productId", Integer.valueOf(1)),
+      new IndexOptions().unique(true)
+      .background(false).name("productId"));
+
+    ratingCollection.createIndex(
+      new Document("productId", Integer.valueOf(1)),
+      new IndexOptions().unique(true)
+        .background(false).name("productId"));
+
+    ratingCollection.createIndex(
+      new Document("userId", Integer.valueOf(1)),
+      new IndexOptions().unique(true)
+        .background(false).name("userId"));
+
+//    productCollection.createIndex(MongoDBObject("productId" -> 1))
+//    ratingCollection.createIndex(MongoDBObject("productId" -> 1))
+//    ratingCollection.createIndex(MongoDBObject("userId" -> 1))
 
     mongoClient.close()
   }
