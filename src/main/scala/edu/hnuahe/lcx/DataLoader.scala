@@ -2,9 +2,10 @@ package edu.hnuahe.lcx
 
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.{MongoClient, MongoClientURI}
+//import com.mongodb.client.model.Collation
+//import com.mongodb.client.MongoClient
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.bson.Document
 
 /**
  * Product数据集
