@@ -1,5 +1,5 @@
 package edu.hnuahe.lcx
-
+//lishangkun
 import breeze.numerics.sqrt
 import OfflineRecommender.MONGODB_RATING_COLLECTION
 import org.apache.spark.SparkConf
